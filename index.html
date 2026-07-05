@@ -506,6 +506,120 @@
       font-size: 12.5px;
       color: var(--ink-soft);
     }
+
+    /* ---- MISC / DELIVERY TAB ---- */
+    .misc-intro {
+      font-size: 14.5px;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      max-width: 640px;
+    }
+
+    .misc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width:680px) {
+      .misc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .misc-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 20px 22px;
+    }
+
+    .misc-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .misc-head h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      margin: 0;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .verdict {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .verdict.ok {
+      background: #E4EEDD;
+      color: var(--leaf);
+    }
+
+    .verdict.caution {
+      background: #F5E9CE;
+      color: #8A6416;
+    }
+
+    .verdict.avoid {
+      background: #F3DCD2;
+      color: var(--clay);
+    }
+
+    .misc-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .misc-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    .misc-stat b {
+      display: block;
+      font-size: 16px;
+      color: var(--ink);
+    }
+
+    .misc-stat span {
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .misc-why {
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      margin: 0 0 10px;
+      line-height: 1.55;
+    }
+
+    .misc-tip {
+      font-size: 13.5px;
+      color: var(--ink);
+      background: var(--cream-2);
+      border-radius: 4px;
+      padding: 10px 13px;
+      margin: 0;
+    }
+
+    .misc-tip b {
+      color: var(--clay-2);
+    }
   </style>
 </head>
 
@@ -915,6 +1029,88 @@
       document.querySelectorAll('#daytabs button').forEach((b, idx) => b.classList.toggle('active', idx === i));
       document.querySelectorAll('.day-panel').forEach((p, idx) => p.classList.toggle('active', idx === i));
     }
+
+    // ---- MISC TAB: Swiggy / Zomato order-in guide ----
+    const miscBtn = document.createElement('button');
+    miscBtn.innerHTML = 'Misc<span class="tag">Swiggy / Zomato</span>';
+    miscBtn.onclick = () => selectDay(DAYS.length);
+    tabsEl.appendChild(miscBtn);
+
+    const MISC_ITEMS = [
+      {
+        name: "Chicken biriyani (restaurant order)", verdict: "caution", verdictLabel: "Portion it down",
+        portion: "~250 g (half a regular parcel)", kcal: "450", protein: "18 g",
+        why: "The rice is usually fried in ghee or oil before it's even cooked with the meat, then finished with more oil or ghee on top. A full parcel (400–450 g) commonly runs 700–900 kcal — that's a third of your whole day's budget in one dish, and the rice-to-meat ratio means most of it is refined carbs, not protein.",
+        tip: "Eat half the parcel and save the rest for later, or share it. Skip the fried onions/extra raita oil drizzle. Treat it as your entire lunch or dinner for the day — don't add it on top of a planned meal."
+      },
+      {
+        name: "Rice + curry meal box", verdict: "ok", verdictLabel: "Closest to home food",
+        portion: "1 full box (~350 g rice + curry + side)", kcal: "600", protein: "22 g",
+        why: "This is the safest delivery choice on the list because it mirrors what's already in your plan — rice with a fish, chicken, or egg curry. The main risk is restaurant oil quantity, which you can't see or control, so it can run 100–150 kcal higher than the same meal cooked at home.",
+        tip: "Pick fish or chicken curry over paneer/butter-masala style gravies. This can directly replace your lunch or dinner for the day — no need to add anything else alongside it."
+      },
+      {
+        name: "Pizza (medium, 2 slices)", verdict: "caution", verdictLabel: "Cap it at 2 slices",
+        portion: "2 slices (~140 g)", kcal: "520", protein: "20 g",
+        why: "Refined-flour crust plus cheese plus processed meat toppings is a dense combination of refined carbs, saturated fat, and sodium. It's also easy to eat 4–5 slices without feeling properly full, which can quietly double the calories.",
+        tip: "Decide your slice count before opening the box, not after. Skip stuffed-crust or extra-cheese variants. A side salad adds volume without many calories if you still feel hungry."
+      },
+      {
+        name: "Burger (regular, no fries)", verdict: "caution", verdictLabel: "Skip the fries",
+        portion: "1 regular burger", kcal: "430", protein: "19 g",
+        why: "The bun, mayo, and fried patty combination is calorie-dense without being very filling for its calorie cost. Fries alongside typically add another 300–400 kcal for very little satiety in return.",
+        tip: "Order the burger without fries or a soft drink as a combo — those two additions often cost more calories than the burger itself."
+      },
+      {
+        name: "Soft drinks (cola/soda)", verdict: "avoid", verdictLabel: "Best skipped",
+        portion: "300 ml can/bottle", kcal: "130", protein: "0 g",
+        why: "This is pure sugar in liquid form with zero protein, fibre, or fat to slow it down — it doesn't register as food to your appetite, so it adds calories on top of everything else rather than replacing anything.",
+        tip: "Skip it and drink water, buttermilk, or a diet/zero-sugar version instead. If you do want the real thing occasionally, treat a can as a rare treat, not a routine add-on to every order."
+      },
+      {
+        name: "Chips (Lays, classic pack)", verdict: "caution", verdictLabel: "Half pack, not full",
+        portion: "52 g pack", kcal: "280", protein: "3 g",
+        why: "Chips are engineered to be moreish, so people routinely eat 1.5–2x what they intend to. They're mostly refined starch, oil, and salt — very little protein or fibre to signal fullness, and the sodium can show up as extra water weight on the scale the next morning.",
+        tip: "If you're craving something crunchy, go for a smaller pack or share it, rather than finishing a full 52 g bag solo. Roasted peanuts or makhana are a better daily habit for the same craving."
+      },
+      {
+        name: "Biscuits (Good Day / Marie / Moms Magic)", verdict: "caution", verdictLabel: "2–3 pieces, not the pack",
+        portion: "2–3 biscuits", kcal: "100", protein: "1.5 g",
+        why: "These are refined flour, sugar, and fat with almost no protein or fibre, so they don't keep you full — it's very easy to eat 6–8 in one sitting with tea without really noticing, which can quietly add 300+ kcal.",
+        tip: "Have 2–3 with your tea and put the packet away rather than keeping it open next to you. This is fine as an occasional treat, not something to build into every day's plan."
+      },
+      {
+        name: "Milk (regular glass)", verdict: "ok", verdictLabel: "Actually helpful",
+        portion: "200 ml, toned milk", kcal: "100", protein: "7 g",
+        why: "Unlike most items on this list, milk has a genuinely good protein-to-calorie ratio and real nutritional value — calcium, vitamin D, and decent protein. Full-cream milk runs a bit higher (~120 kcal for the same 200 ml) because of the extra fat.",
+        tip: "1–2 glasses of toned or double-toned milk a day is a fine, easy way to nudge your protein total up — no need to restrict this one like the others."
+      }
+    ];
+
+    const miscPanel = document.createElement('div');
+    miscPanel.className = 'day-panel';
+    miscPanel.id = 'panel-misc';
+    miscPanel.innerHTML = `
+  <p class="misc-intro">Your 7-day plan above stays exactly as it was. This tab is a reference for the days you order in from Swiggy or Zomato instead of cooking — what a sensible portion looks like, roughly what it costs you, and why some of these items are worse deals than others for the calories they cost.</p>
+  <div class="misc-grid">
+    ${MISC_ITEMS.map(it => `
+      <div class="misc-card">
+        <div class="misc-head">
+          <h3>${it.name}</h3>
+          <span class="verdict ${it.verdict}">${it.verdictLabel}</span>
+        </div>
+        <div class="misc-stats">
+          <div class="misc-stat"><b>${it.portion}</b><span>Safe portion</span></div>
+          <div class="misc-stat"><b>${it.kcal} kcal</b><span>Approx.</span></div>
+          <div class="misc-stat"><b>${it.protein}</b><span>Protein</span></div>
+        </div>
+        <p class="misc-why">${it.why}</p>
+        <p class="misc-tip"><b>Do this:</b> ${it.tip}</p>
+      </div>
+    `).join('')}
+  </div>
+`;
+    panelsEl.appendChild(miscPanel);
   </script>
 
 </body>
